@@ -16,15 +16,26 @@
   <!-- scripts (third-party) -->
   <script src="/js/third-party/jquery/jquery-2.1.4.min.js"></script>
   <script src="/js/third-party/angular/angular.min.js"></script>
+  <script src="/js/third-party/underscore/underscore-min.js"></script>
 
   <!-- scripts -->
   <script src="/js/angular_app.js"></script>
   <script src="/js/common/data_services.js"></script>
   <script src="/js/common/data_const.js"></script>
   <script src="/js/services/example_service.js"></script>
+  <script src="/js/factory/ajax_request_factory.js"></script>
+  <script src="/js/factory/ajax_response_factory.js"></script>
 
 </head>
+
 <body ng-controller="MainController">
-  <h1>{{exampleData | date}}</h1>
+  <h2><code>Today is {{simpleData | date}}</code></h2>
+  <button ng-click="createExampleData()">Create Example Data</button><button ng-click="clearCollection()">Clear Collection</button>
+  <div ng-if="!listData || listData.length === 0">
+    <ul><li><code>no data</code></li></ul>
+  </div>
+  <ol>
+    <li ng-repeat="example in listData"><code>{{example}}</code></li>
+  </ol>
 </body>
 </html>

@@ -1,106 +1,149 @@
 package org.mikechabot.ajax;
 
+import org.springframework.stereotype.Component;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-
-import java.io.Serializable;
 
 /**
+ * Factory class to generate ResponseEntity objects, which represent the entire HTTP response.
  * Created by mikechabot on 10/30/15.
  */
 @Component
 public class AjaxResponseFactory<T> {
 
-    /**
-     * This represents the status of the business request:
-     *    Success: The HTTP and business request were successful
-     *       Fail: The HTTP request was successful, but the business request encountered a failure condition (e.g. failed validation)
-     *      Error: Either the HTTP or business request encountered an error condition (e.g. MongoClientException, 401 Bad Request)
-     */
-    private enum ResponseStatus {
-        SUCCESS, FAIL, ERROR
+    private enum AjaxResponseStatus {
+        SUCCESS,    // The HTTP and business request were successful
+           FAIL,    // The HTTP request was successful, but the business request encountered a failure condition (e.g. failed validation)
+          ERROR     // The HTTP or business request encountered an error condition (e.g. MongoClientException, 401 Bad Request)
     }
 
     public ResponseEntity<JsonResponse<T>> success() {
-        return getResponseEntity(HttpStatus.OK, ResponseStatus.SUCCESS, null, null, null);
+        return getResponseEntity(HttpStatus.OK, AjaxResponseStatus.SUCCESS, null, null, null);
     }
 
-    public ResponseEntity<JsonResponse<T>> success (String message) {
-        return getResponseEntity(HttpStatus.OK, ResponseStatus.SUCCESS, message, null, null);
+    public ResponseEntity<JsonResponse<T>> successWithMessage (String statusMessage) {
+        return getResponseEntity(HttpStatus.OK, AjaxResponseStatus.SUCCESS, statusMessage, null, null);
     }
 
-    public ResponseEntity<JsonResponse<T>> success (String message, T data) {
-        return getResponseEntity(HttpStatus.OK, ResponseStatus.SUCCESS, message, data, null);
+    public ResponseEntity<JsonResponse<T>> successWithData (T t) {
+        return getResponseEntity(HttpStatus.OK, AjaxResponseStatus.SUCCESS, null, t, null);
     }
 
-    public ResponseEntity<JsonResponse<T>> success (String message, T data, HttpHeaders headers) {
-        return getResponseEntity(HttpStatus.OK, ResponseStatus.SUCCESS, message, data, headers);
+    public ResponseEntity<JsonResponse<T>> successWithMessageAndData (String statusMessage, T t) {
+        return getResponseEntity(HttpStatus.OK, AjaxResponseStatus.SUCCESS, statusMessage, t, null);
     }
 
-    public ResponseEntity<JsonResponse<T>> fail (String message) {
-        return getResponseEntity(HttpStatus.OK, ResponseStatus.FAIL, message, null, null);
+    public ResponseEntity<JsonResponse<T>> successWithMessageDataAndHeaders (String statusMessage, T t, HttpHeaders headers) {
+        return getResponseEntity(HttpStatus.OK, AjaxResponseStatus.SUCCESS, statusMessage, t, headers);
     }
 
-    public ResponseEntity<JsonResponse<T>> error (String message) {
-        return getResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, ResponseStatus.ERROR, message, null, null);
+    public ResponseEntity<JsonResponse<T>> fail() {
+        return getResponseEntity(HttpStatus.OK, AjaxResponseStatus.FAIL, null, null, null);
     }
 
-    public ResponseEntity<JsonResponse<T>> forbidden (String message) {
-        return getResponseEntity(HttpStatus.FORBIDDEN, ResponseStatus.ERROR, message, null, null);
+    public ResponseEntity<JsonResponse<T>> failWithMessage (String statusMessage) {
+        return getResponseEntity(HttpStatus.OK, AjaxResponseStatus.FAIL, statusMessage, null, null);
     }
+
+    public ResponseEntity<JsonResponse<T>> failWithData (T t) {
+        return getResponseEntity(HttpStatus.OK, AjaxResponseStatus.FAIL, null, t, null);
+    }
+
+    public ResponseEntity<JsonResponse<T>> failWithMessageAndData (String statusMessage, T t) {
+        return getResponseEntity(HttpStatus.OK, AjaxResponseStatus.FAIL, statusMessage, t, null);
+    }
+
+    public ResponseEntity<JsonResponse<T>> error () {
+        return getResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, AjaxResponseStatus.ERROR, null, null, null);
+    }
+
+    public ResponseEntity<JsonResponse<T>> errorWithMessage (String statusMessage) {
+        return getResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, AjaxResponseStatus.ERROR, statusMessage, null, null);
+    }
+
+    public ResponseEntity<JsonResponse<T>> errorWithData(T t) {
+        return getResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, AjaxResponseStatus.ERROR, null, t, null);
+    }
+
+    public ResponseEntity<JsonResponse<T>> errorWithMessageAndData (String statusMessage, T t) {
+        return getResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, AjaxResponseStatus.ERROR, statusMessage, t, null);
+    }
+
+    public ResponseEntity<JsonResponse<T>> forbidden () {
+        return getResponseEntity(HttpStatus.FORBIDDEN, AjaxResponseStatus.ERROR, null, null, null);
+    }
+
+    public ResponseEntity<JsonResponse<T>> forbiddenWithMessage (String statusMessage) {
+        return getResponseEntity(HttpStatus.FORBIDDEN, AjaxResponseStatus.ERROR, statusMessage, null, null);
+    }
+
+    public ResponseEntity<JsonResponse<T>> forbiddenWithData (T t) {
+        return getResponseEntity(HttpStatus.FORBIDDEN, AjaxResponseStatus.ERROR, null, t, null);
+    }
+
+    public ResponseEntity<JsonResponse<T>> forbiddenWithMessageAndData (String statusMessage, T t) {
+        return getResponseEntity(HttpStatus.FORBIDDEN, AjaxResponseStatus.ERROR, statusMessage, t, null);
+    }
+
 
     /**
-     * Wrap a JsonResponse object in a ResponseEntity object; the latter is unpacked
-     * by the DataAccessService in the browser, at which point the former is provided
-     * to the specific service that generated the request (i.e. StockService, StatisticsService)
-     *
+     * ResponseEntity represents the complete HTTP response
      * @param httpStatus
      * @param responseStatus
-     * @param message
-     * @param data
+     * @param statusMessage
+     * @param t
      * @param headers
-     * @return
+     * @return an HTTP response object
      */
-    private ResponseEntity<JsonResponse<T>> getResponseEntity(HttpStatus httpStatus, ResponseStatus responseStatus, String message, T data, HttpHeaders headers) {
+    private ResponseEntity<JsonResponse<T>> getResponseEntity(HttpStatus httpStatus, AjaxResponseStatus responseStatus, String statusMessage, T t, HttpHeaders headers) {
         if (httpStatus == null) throw new IllegalArgumentException("HttpStatus cannot be null");
-        if (responseStatus == null) throw new IllegalArgumentException("ResponseStatus cannot be null");
-
-        JsonResponse<T> jsonResponse = new JsonResponse(responseStatus, message, data);
-        return new ResponseEntity(jsonResponse, headers, httpStatus);
+        return new ResponseEntity(getResponseBody(responseStatus, statusMessage, t), headers, httpStatus);
     }
 
     /**
-     * This is the AJAX response sent back to the browser
+     * JsonResponse represents the body of the HTTP response
+     * @param responseStatus
+     * @param statusMessage
+     * @param t
+     * @return
      */
-    public static class JsonResponse<T> implements Serializable {
+    private JsonResponse<T> getResponseBody(AjaxResponseStatus responseStatus, String statusMessage, T t) {
+        if (responseStatus == null) throw new IllegalArgumentException("ResponseStatus cannot be null");
+        return new JsonResponse(responseStatus, statusMessage, t);
+    }
 
-        private ResponseStatus status;
-        private String message;
+    /**
+     * Generic AJAX response object. Consumed by JavaScript services
+     * @param <T>
+     */
+    public static class JsonResponse<T> {
+
+        private AjaxResponseStatus status;
+        private String statusMessage;
         private T data;
 
-        public JsonResponse(ResponseStatus status, String message, T data) {
+        public JsonResponse(AjaxResponseStatus status, String statusMessage, T data) {
             if (status == null) throw new IllegalArgumentException("ResponseStatus cannot be null");
             this.status = status;
-            this.message = message;
+            this.statusMessage = statusMessage;
             this.data = data;
         }
 
-        public ResponseStatus getStatus() {
+        public AjaxResponseStatus getStatus() {
             return status;
         }
 
-        public void setStatus(ResponseStatus status) {
+        public void setStatus(AjaxResponseStatus status) {
             this.status = status;
         }
 
-        public String getMessage() {
-            return message;
+        public String getStatusMessage() {
+            return statusMessage;
         }
 
-        public void setMessage(String message) {
-            this.message = message;
+        public void setStatusMessage(String statusMessage) {
+            this.statusMessage = statusMessage;
         }
 
         public T getData() {
@@ -110,7 +153,6 @@ public class AjaxResponseFactory<T> {
         public void setData(T data) {
             this.data = data;
         }
-
     }
 
 }
