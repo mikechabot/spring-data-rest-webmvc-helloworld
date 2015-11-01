@@ -3,47 +3,30 @@ var app = angular.module('springHelloWorld', []);
 app.controller('MainController', ['$scope', '$timeout', 'ExampleService',
     function ($scope, $timeout, ExampleService) {
 
-        function _init() {
-            var promises = [
-                ExampleService.getSimpleDataExample(),
-                ExampleService.getListOfDataExample()
-            ];
+        _updateExampleList();
 
-            $.when.apply(this, promises)
-                .done(function(simpleData, listData) {
+        function _updateExampleList() {
+            ExampleService.getExampleList()
+                .done(function(examples) {
                     $timeout(function() {
-                        $scope.simpleData = simpleData;
-                        $scope.listData = listData;
-                    })
+                        $scope.examples = examples;
+                    });
                 });
         }
-
 
         $scope.createExampleData = function() {
             ExampleService.createExampleData()
                 .done(function() {
-                    ExampleService.getListOfDataExample()
-                        .done(function(listData) {
-                            $timeout(function() {
-                                $scope.listData = listData;
-                            });
-                        });
+                    _updateExampleList();
                 });
         };
 
         $scope.clearCollection = function() {
             ExampleService.clearCollection()
                 .done(function() {
-                    ExampleService.getListOfDataExample()
-                        .done(function(listData) {
-                            $timeout(function() {
-                                $scope.listData = listData;
-                            });
-                        });
+                    _updateExampleList();
                 });
         };
-
-        _init();
 
     }
 ]);

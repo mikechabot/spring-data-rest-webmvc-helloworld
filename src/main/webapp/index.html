@@ -22,6 +22,7 @@
   <script src="/js/angular_app.js"></script>
   <script src="/js/common/data_services.js"></script>
   <script src="/js/common/data_const.js"></script>
+  <script src="/js/common/common.js"></script>
   <script src="/js/services/example_service.js"></script>
   <script src="/js/factory/ajax_request_factory.js"></script>
   <script src="/js/factory/ajax_response_factory.js"></script>
@@ -29,13 +30,17 @@
 </head>
 
 <body ng-controller="MainController">
-  <h2><code>Today is {{simpleData | date}}</code></h2>
-  <button ng-click="createExampleData()">Create Example Data</button><button ng-click="clearCollection()">Clear Collection</button>
-  <div ng-if="!listData || listData.length === 0">
-    <ul><li><code>no data</code></li></ul>
-  </div>
-  <ol>
-    <li ng-repeat="example in listData"><code>{{example}}</code></li>
-  </ol>
+  <h2><code>spring-data-rest-webmvc-helloworld</code></h2>
+  <button ng-click="createExampleData()">Create Data</button><button ng-click="clearCollection()">Clear Collection</button>
+
+  <code>
+    <h4>Size: {{examples.length}}</h4>
+    <div ng-repeat="example in examples">
+
+    </div>
+    <ul>
+      <li ng-repeat="example in examples"><code>{{example}}</code></li>
+    </ul>
+  </code>
 </body>
 </html>

@@ -4,20 +4,29 @@ app.factory('AjaxResponseFactory', ['DATA_CONST', function(DATA_CONST) {
 
     angular.extend(AjaxResponse.prototype, {
         _init: function (jsonData, jqXHR) {
-            var response = this;
 
-            this.data = jsonData.data;
-            this.status = jsonData.status;
-            this.statusMessage = jsonData.statusMessage;
+            this.data = {};                     // Holds data object sent back from the server
+            this.error = {};                    // Holds error details (code and status text)
+            this.status = undefined;            // Status of the request/response (success, fail, error)
+            this.statusMessage = undefined;     // Additional details related to the status of the request/response
 
-            if (angular.isDefined(jqXHR) && !this.isSuccess()) {
+            this._initData(jsonData);
+            this._initError(jqXHR);
+
+            return this;
+        },
+        _initData: function(json) {
+            this.data = json.data;
+            this.status = json.status;
+            this.statusMessage = json.statusMessage;
+        },
+        _initError: function(jqXHR) {
+            if (angular.hasValue(jqXHR) && !this.isSuccess()) {
                 this.error = {
                     code: jqXHR.status,
                     status: jqXHR.statusText
                 }
             }
-
-            return response;
         },
         getData: function() {
             return this.data;
@@ -37,11 +46,16 @@ app.factory('AjaxResponseFactory', ['DATA_CONST', function(DATA_CONST) {
         getErrorCode: function() {
             return this.getError().code;
         },
+        getErrorMessage: function () {
+           return this.hasStatusMessage()
+                ? this.getStatusMessage()
+                : 'Failed with not additional detail from the server';
+        },
         hasError: function() {
-            return angular.isDefined(this.getError());
+            return angular.hasValue(this.getError());
         },
         hasStatusMessage: function() {
-            return angular.isDefined(this.getStatusMessage());
+            return angular.hasValue(this.getStatusMessage());
         },
         isSuccess: function() {
             return this.getStatus() === DATA_CONST.REQUEST_STATUS.SUCCESS;

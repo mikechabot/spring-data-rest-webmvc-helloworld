@@ -11,7 +11,6 @@ public interface ExampleService {
 
     List<Example> getExampleData();
     void createExampleData();
-    int getCollectionSize();
     void clearCollection();
 
 }

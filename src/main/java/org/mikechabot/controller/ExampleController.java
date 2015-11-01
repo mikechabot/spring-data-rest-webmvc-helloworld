@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Date;
-
 /**
  * Created by mikechabot on 10/30/15.
  */
@@ -24,12 +22,7 @@ public class ExampleController {
     @Autowired
     private ExampleService exampleService;
 
-    @RequestMapping(value = "/simple", method = RequestMethod.GET)
-    public ResponseEntity getDate() {
-        return ajaxResponseFactory.successWithData(new Date());
-    }
-
-    @RequestMapping(value="/data", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity getExampleData() {
         return ajaxResponseFactory.successWithData(exampleService.getExampleData());
     }
@@ -37,13 +30,13 @@ public class ExampleController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity createExampleData() {
         exampleService.createExampleData();
-        return ajaxResponseFactory.successWithMessage("Size of collection: " + exampleService.getCollectionSize());
+        return ajaxResponseFactory.successWithMessage("Successfully created example data");
     }
 
-    @RequestMapping(value = "/clear", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete/all", method = RequestMethod.POST)
     public ResponseEntity clearCollection() {
         exampleService.clearCollection();
-        return ajaxResponseFactory.successWithMessage("Size of collection: " + exampleService.getCollectionSize());
+        return ajaxResponseFactory.successWithMessage("Purged collection");
     }
 
 }

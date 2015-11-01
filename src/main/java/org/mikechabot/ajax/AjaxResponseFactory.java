@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 /**
- * Factory class to generate ResponseEntity objects, which represent the entire HTTP response.
+ * Factory class to generate ResponseEntity objects
  * Created by mikechabot on 10/30/15.
  */
 @Component

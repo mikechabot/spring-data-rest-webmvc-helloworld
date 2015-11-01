@@ -6,14 +6,11 @@ app.service('ExampleService', ['DataAccessService', function (DataAccessService)
         createExampleData: function() {
             return DataAccessService.post(_baseServiceUrl);
         },
-        getSimpleDataExample: function() {
-            return DataAccessService.get(_baseServiceUrl + '/simple');
-        },
-        getListOfDataExample: function() {
-            return DataAccessService.get(_baseServiceUrl + '/data');
+        getExampleList: function() {
+            return DataAccessService.get(_baseServiceUrl);
         },
         clearCollection: function() {
-            return DataAccessService.post(_baseServiceUrl + '/clear');
+            return DataAccessService.post(_baseServiceUrl + '/delete/all');
         }
     };
 
