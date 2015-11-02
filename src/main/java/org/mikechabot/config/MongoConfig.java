@@ -1,5 +1,6 @@
 package org.mikechabot.config;
 
+import org.mikechabot.beans.MongoProperties;
 import org.mikechabot.repository.RepositoryPackage;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import com.mongodb.MongoClient;
 public class MongoConfig extends AbstractMongoConfiguration {
 
     @Autowired
-    private AppConfig.MongoProperties mongoProperties;
+    private MongoProperties mongoProperties;
 
     @Override
     protected String getDatabaseName() {

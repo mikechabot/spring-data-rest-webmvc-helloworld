@@ -28,11 +28,6 @@ public class ExampleServiceImpl implements ExampleService {
     }
 
     @Override
-    public int getCollectionSize() {
-        return exampleRepository.findAll().size();
-    }
-
-    @Override
     public void clearCollection() {
         exampleRepository.deleteAll();
     }
