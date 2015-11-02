@@ -27,9 +27,6 @@ public class AjaxResponseFactoryTest {
     @Mock
     private ResponseEntity responseEntity;
 
-    @Mock
-    private AjaxResponseStatus success, fail, error;
-
     private final HttpStatus OK = HttpStatus.OK;
     private final HttpStatus INTERNAL_SERVER_ERROR = HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -38,7 +35,7 @@ public class AjaxResponseFactoryTest {
     private static final AjaxResponseStatus ERROR = AjaxResponseStatus.ERROR;
 
     @BeforeMethod
-    public void beforeMethod() throws Exception {
+    public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
     }
 
