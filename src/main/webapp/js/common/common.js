@@ -1,3 +1,3 @@
 angular.hasValue = function(value) {
-    return angular.isDefined(value) && value !== null;
+    return value !== null && angular.isDefined(value);
 };

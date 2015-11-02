@@ -6,7 +6,7 @@ app.controller('MainController', ['$scope', '$timeout', 'ExampleService',
         _updateExampleList();
 
         function _updateExampleList() {
-            ExampleService.getExampleList()
+            ExampleService.getExampleData()
                 .done(function(examples) {
                     $timeout(function() {
                         $scope.examples = examples;

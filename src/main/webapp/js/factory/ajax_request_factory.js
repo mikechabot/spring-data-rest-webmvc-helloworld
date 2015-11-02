@@ -15,6 +15,7 @@ app.factory('AjaxRequestFactory', ['DATA_CONST', 'AjaxResponseFactory', 'AjaxSer
                 deferred.reject();
             })
             .always(function() {
+                // Always log messages from the server
                 if (!request.isSuccess()) {
                     console.error(request.getOptions().url, request.getErrorMessage());
                 } else if (request.hasStatusMessage()) {

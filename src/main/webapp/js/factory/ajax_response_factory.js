@@ -5,8 +5,12 @@ app.factory('AjaxResponseFactory', ['DATA_CONST', function(DATA_CONST) {
     angular.extend(AjaxResponse.prototype, {
         _init: function (jsonData, jqXHR) {
 
+            if (!angular.hasValue(jsonData) || _.isEmpty(jsonData)) {
+                throw new Error('jsonData cannot be null/undefined');
+            }
+
             this.data = {};                     // Holds data object sent back from the server
-            this.error = {};                    // Holds error details (code and status text)
+            this.error = undefined;             // Holds error details (code and status text)
             this.status = undefined;            // Status of the request/response (success, fail, error)
             this.statusMessage = undefined;     // Additional details related to the status of the request/response
 
@@ -21,10 +25,14 @@ app.factory('AjaxResponseFactory', ['DATA_CONST', function(DATA_CONST) {
             this.statusMessage = json.statusMessage;
         },
         _initError: function(jqXHR) {
-            if (angular.hasValue(jqXHR) && !this.isSuccess()) {
+            if (!this.isSuccess()) {
                 this.error = {
-                    code: jqXHR.status,
-                    status: jqXHR.statusText
+                    code: jqXHR ? jqXHR.status : undefined,
+                    status: jqXHR ?
+                        jqXHR.statusText
+                        : this.getStatusMessage()
+                            ? this.getStatusMessage()
+                            : 'Failed with not additional detail from the server'
                 }
             }
         },
@@ -37,25 +45,25 @@ app.factory('AjaxResponseFactory', ['DATA_CONST', function(DATA_CONST) {
         getStatusMessage: function() {
             return this.statusMessage;
         },
-        getError: function() {
-            return this.error;
-        },
-        getErrorStatus: function() {
-            return this.getError().status;
-        },
-        getErrorCode: function() {
-            return this.getError().code;
-        },
-        getErrorMessage: function () {
-           return this.hasStatusMessage()
-                ? this.getStatusMessage()
-                : 'Failed with not additional detail from the server';
+        hasStatusMessage: function() {
+            return angular.hasValue(this.getStatusMessage())
+                && !_.isEmpty(this.getStatusMessage());
         },
         hasError: function() {
             return angular.hasValue(this.getError());
         },
-        hasStatusMessage: function() {
-            return angular.hasValue(this.getStatusMessage());
+        getError: function() {
+            return this.error;
+        },
+        getErrorCode: function() {
+            return this.hasError()
+                ? this.getError().code
+                : undefined;
+        },
+        getErrorStatus: function() {
+            return this.hasError()
+                ? this.getError().status
+                : undefined;
         },
         isSuccess: function() {
             return this.getStatus() === DATA_CONST.REQUEST_STATUS.SUCCESS;
