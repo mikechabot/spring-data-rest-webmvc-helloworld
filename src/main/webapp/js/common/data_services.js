@@ -5,6 +5,16 @@ app.service('AjaxService', function () {
     return {
         request: function (options) {
             return $.ajax(options);
+        },
+        getStatusFromJqXHR: function(jqXHR) {
+            if (!jqXHR) return;
+            var status = jqXHR.status;
+            if (status === DATA_CONST.JQXHR_STATUS.SUCCESS) {
+                return DATA_CONST.REQUEST_STATUS.SUCCESS;
+            } else if (status === DATA_CONST.JQXHR_STATUS.SUCCESS) {
+                return DATA_CONST.REQUEST_STATUS.ERROR;
+            }
+            return 'Unable to map jqXHR status to request status: ' + status;
         }
     }
 });

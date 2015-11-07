@@ -4,6 +4,8 @@ import org.mikechabot.model.Example;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * If the Example collection does not already exist in the repository,
  * MongoDB will create one. As a result, we can easily add new repositories on-the-fly
@@ -14,4 +16,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ExampleRepository extends MongoRepository<Example, String> {
+
+    List<Example> findByName(String name);
+
 }

@@ -8,13 +8,13 @@ package org.mikechabot.ajax;
 public class JsonResponse<T> {
 
     private AjaxResponseStatus status;
-    private String statusMessage;
+    private String message;
     private T data;
 
-    public JsonResponse(AjaxResponseStatus status, String statusMessage, T data) {
+    public JsonResponse(AjaxResponseStatus status, String message, T data) {
         if (status == null) throw new IllegalArgumentException("ResponseStatus cannot be null");
         this.status = status;
-        this.statusMessage = statusMessage;
+        this.message = message;
         this.data = data;
     }
 
@@ -26,12 +26,12 @@ public class JsonResponse<T> {
         this.status = status;
     }
 
-    public String getStatusMessage() {
-        return statusMessage;
+    public String getMessage() {
+        return message;
     }
 
-    public void setStatusMessage(String statusMessage) {
-        this.statusMessage = statusMessage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public T getData() {

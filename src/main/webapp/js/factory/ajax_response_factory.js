@@ -1,69 +1,59 @@
-app.factory('AjaxResponseFactory', ['DATA_CONST', function(DATA_CONST) {
+app.factory('AjaxResponseFactory', ['DATA_CONST', 'AjaxService', function(DATA_CONST, AjaxService) {
 
     function AjaxResponse() { }
 
     angular.extend(AjaxResponse.prototype, {
-        _init: function (jsonData, jqXHR) {
+        _init: function (response, status, jqXHR, error) {
 
-            if (!angular.hasValue(jsonData) || _.isEmpty(jsonData)) {
-                throw new Error('jsonData cannot be null/undefined');
+            this.data = undefined;          // Holds the data object sent back from the server (e.g. list of users)
+            this.message = undefined;       // Holds a message from the server or the AJAX response object (i.e. jqXHR)
+            this.status = undefined;        // Holds the status of the business request (e.g. success, fail, error)
+            this.statusCode = undefined;    // Holds the HTTP response code
+
+            if (!response && !status && !jqXHR && !error) {
+                return this;
             }
 
-            this.data = {};                     // Holds data object sent back from the server
-            this.error = undefined;             // Holds error details (code and status text)
-            this.status = undefined;            // Status of the request/response (success, fail, error)
-            this.statusMessage = undefined;     // Additional details related to the status of the request/response
+            this.statusCode = jqXHR.status;
 
-            this._initData(jsonData);
-            this._initError(jqXHR);
+            if (error && !response) {
+                this.status = DATA_CONST.REQUEST_STATUS.ERROR;
+                this.message = error;
+                return this;
+            }
+
+            if (response) {
+                this.status = response.status;
+                this.data = response.data;
+                this.message = (this.isSuccess() || response.message)
+                    ? response.message
+                    : this.isError()
+                        ? error
+                        : 'Failed with no additional detail from the server';
+            } else {
+                this.status = AjaxService.getStatusFromJqXHR(jqXHR);
+                this.message = error || jqXHR.statusText;
+            }
 
             return this;
-        },
-        _initData: function(json) {
-            this.data = json.data;
-            this.status = json.status;
-            this.statusMessage = json.statusMessage;
-        },
-        _initError: function(jqXHR) {
-            if (!this.isSuccess()) {
-                this.error = {
-                    code: jqXHR ? jqXHR.status : undefined,
-                    status: jqXHR ?
-                        jqXHR.statusText
-                        : this.getStatusMessage()
-                            ? this.getStatusMessage()
-                            : 'Failed with not additional detail from the server'
-                }
-            }
         },
         getData: function() {
             return this.data;
         },
+        getMessage: function() {
+            return this.message;
+        },
         getStatus: function() {
             return this.status;
         },
-        getStatusMessage: function() {
-            return this.statusMessage;
+        getStatusCode: function() {
+            return this.statusCode;
         },
-        hasStatusMessage: function() {
-            return angular.hasValue(this.getStatusMessage())
-                && !_.isEmpty(this.getStatusMessage());
+        hasMessage: function() {
+            return angular.hasValue(this.getMessage());
         },
-        hasError: function() {
-            return angular.hasValue(this.getError());
-        },
-        getError: function() {
-            return this.error;
-        },
-        getErrorCode: function() {
-            return this.hasError()
-                ? this.getError().code
-                : undefined;
-        },
-        getErrorStatus: function() {
-            return this.hasError()
-                ? this.getError().status
-                : undefined;
+        hasData: function() {
+            return angular.hasValue(this.getData());
         },
         isSuccess: function() {
             return this.getStatus() === DATA_CONST.REQUEST_STATUS.SUCCESS;
@@ -76,8 +66,8 @@ app.factory('AjaxResponseFactory', ['DATA_CONST', function(DATA_CONST) {
         }
     });
 
-    return function newAjaxResponse(jsonData, jqXHR) {
-        return new AjaxResponse()._init(jsonData, jqXHR);
+    return function newAjaxResponse(response, status, jqXHR, error) {
+        return new AjaxResponse()._init(response, status, jqXHR, error);
     };
 
 }]);

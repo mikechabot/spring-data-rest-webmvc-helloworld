@@ -23,8 +23,13 @@ public class ExampleServiceImpl implements ExampleService {
     }
 
     @Override
-    public void createExampleData() {
-        exampleRepository.save(new Example());
+    public List<Example> getByName(String name) {
+        return exampleRepository.findByName(name);
+    }
+
+    @Override
+    public void createExampleData(String name) {
+        exampleRepository.save(new Example(name));
     }
 
     @Override

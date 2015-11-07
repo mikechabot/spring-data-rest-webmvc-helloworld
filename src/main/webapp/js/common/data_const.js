@@ -4,5 +4,9 @@ app.constant('DATA_CONST', {
         SUCCESS: 'SUCCESS',
         FAIL: 'FAIL',
         ERROR: 'ERROR'
+    },
+    JQXHR_STATUS: {
+        SUCCESS: 'success',
+        ERROR: 'error'
     }
 });

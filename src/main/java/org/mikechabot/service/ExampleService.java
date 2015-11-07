@@ -9,8 +9,10 @@ import java.util.List;
  */
 public interface ExampleService {
 
+
     List<Example> getExampleData();
-    void createExampleData();
+    List<Example> getByName(String name);
+    void createExampleData(String name);
     void clearCollection();
 
 }

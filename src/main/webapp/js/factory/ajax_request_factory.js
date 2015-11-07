@@ -4,26 +4,34 @@ app.factory('AjaxRequestFactory', ['DATA_CONST', 'AjaxResponseFactory', 'AjaxSer
         var deferred = $.Deferred();
 
         AjaxService.request(request.options)
-            .done(function (response) {
-                request.response = AjaxResponseFactory(response);
+            .done(function (response, status, jqXHR) {
+                request.response = _response(response, status, jqXHR);
                 deferred = request.isSuccess()
                     ? deferred.resolve()
                     : deferred.reject();
             })
-            .fail(function (jqXHR) {
-                request.response = AjaxResponseFactory(jqXHR.responseJSON, jqXHR);
+            .fail(function (jqXHR, status, error) {
+                request.response = _response(jqXHR.responseJSON, status, jqXHR, error);
                 deferred.reject();
             })
             .always(function() {
-                // Always log messages from the server
-                if (!request.isSuccess()) {
-                    console.error(request.getOptions().url, request.getErrorMessage());
-                } else if (request.hasStatusMessage()) {
-                    console.log(request.getStatusMessage());
-                }
+                _log(request);
+
             });
 
         return deferred.promise();
+    }
+
+    function _response(response, status, jqXHR, error) {
+        return AjaxResponseFactory(response, status, jqXHR, error);
+    }
+
+    function _log(request) {
+        !request.isSuccess()
+            ? console.error(request.getOptions().url, request.getStatusCode(), request.getMessage())
+            : request.hasMessage()
+                ? console.log(request.getMessage())
+                : undefined;
     }
 
     function AjaxRequest() {};
@@ -55,7 +63,7 @@ app.factory('AjaxRequestFactory', ['DATA_CONST', 'AjaxResponseFactory', 'AjaxSer
                 url: DATA_CONST.BASE_SPRING_URL + url
             };
             if (data) {
-                this.options.data = JSON.stringify(data);
+                this.options.data = _.isObject(data) ? JSON.stringify(data) : data;
                 this.options.contentType = 'application/json';
             }
         },
@@ -68,26 +76,17 @@ app.factory('AjaxRequestFactory', ['DATA_CONST', 'AjaxResponseFactory', 'AjaxSer
         getData: function() {
             return this.getResponse().getData();
         },
+        getMessage: function() {
+            return this.getResponse().getMessage()
+        },
         getStatus: function() {
             return this.getResponse().getStatus()
         },
-        hasStatusMessage: function() {
-            return this.getResponse().hasStatusMessage();
+        getStatusCode: function() {
+            return this.getResponse().getStatusCode();
         },
-        getStatusMessage: function() {
-            return this.getResponse().getStatusMessage()
-        },
-        hasError: function() {
-            return this.getResponse().hasError();
-        },
-        getErrorMessage: function() {
-            return this.getResponse().getErrorMessage();
-        },
-        getErrorStatus: function() {
-            return this.getResponse().getErrorStatus();
-        },
-        getErrorCode: function() {
-            return this.getResponse().getErrorCode();
+        hasMessage: function() {
+            return this.getResponse().hasMessage();
         },
         isSuccess: function() {
             return this.getResponse().isSuccess();

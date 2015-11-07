@@ -1,6 +1,45 @@
 var app = angular.module('springHelloWorld', []);
 
-app.controller('MainController', ['$scope', '$timeout', 'ExampleService',
+app.filter('capitalize', function() {
+    return function(word) {
+        return angular.isString(word)
+            ? word.charAt(0).toUpperCase() + word.substr(1).toLowerCase()
+            : '';
+    }
+});
+
+app.directive('tableOfData', ['$filter', function($filter) {
+
+    var templateHtml =
+        '<table>' +
+            '<thead>' +
+                '<tr>' +
+                    '<th>#</th>' +
+                    '<th ng-repeat="header in headers">{{header | capitalize}}</td>' +
+                '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+                '<tr ng-repeat="row in data">' +
+                    '<td>{{$index}}</td>' +
+                    '<td ng-repeat="header in headers">{{row[header]}}</td>' +
+                '</tr>' +
+            '</tbody>' +
+        '</table>';
+
+
+    return {
+        restrict: 'E',
+        template: templateHtml,
+        scope: {
+            data: '='
+        },
+        link: function(scope) {
+            scope.headers = _.keys(scope.data[0]);
+        }
+    }
+}]);
+
+app.controller('SampleController', ['$scope', '$timeout', 'ExampleService',
     function ($scope, $timeout, ExampleService) {
 
         _updateExampleList();
@@ -9,16 +48,22 @@ app.controller('MainController', ['$scope', '$timeout', 'ExampleService',
             ExampleService.getExampleData()
                 .done(function(examples) {
                     $timeout(function() {
-                        $scope.examples = examples;
+                        $scope.examples = _.isEmpty(examples) ? undefined : examples;
                     });
                 });
         }
 
-        $scope.createExampleData = function() {
-            ExampleService.createExampleData()
+        $scope.createExampleData = function(name) {
+            $scope.name = undefined;
+            ExampleService.createExampleData(name)
                 .done(function() {
                     _updateExampleList();
-                });
+                })
+        };
+
+        $scope.showAll = function() {
+            _updateExampleList();
+            $scope.displayShowAll = false;
         };
 
         $scope.clearCollection = function() {
@@ -28,6 +73,22 @@ app.controller('MainController', ['$scope', '$timeout', 'ExampleService',
                 });
         };
 
+        $scope.findByName = function(name) {
+            $scope.searchText = undefined;
+            ExampleService.findByName(name)
+                .done(function(examples) {
+                    $timeout(function() {
+                        $scope.examples = examples;
+                        $scope.displayShowAll = true;
+                    });
+                });
+        }
+
     }
 ]);
+
+
+
+
+
 

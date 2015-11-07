@@ -2,6 +2,11 @@
 <html ng-app="springHelloWorld" lang="en">
 <head>
 
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>futurepixel</title>
+
   <!-- meta standard -->
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,15 +15,31 @@
   <meta http-equiv="expires" content="0" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
+  <meta name="author" content="futurepixel">
 
-  <title>hello-world</title>
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- scripts (third-party) -->
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="/css/third-party/skeleton/normalize.css">
+  <link rel="stylesheet" href="/css/third-party/skeleton/skeleton.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Scripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <script src="/js/third-party/jquery/jquery-2.1.4.min.js"></script>
   <script src="/js/third-party/angular/angular.min.js"></script>
   <script src="/js/third-party/underscore/underscore-min.js"></script>
 
-  <!-- scripts -->
   <script src="/js/angular_app.js"></script>
   <script src="/js/common/data_services.js"></script>
   <script src="/js/common/data_const.js"></script>
@@ -28,19 +49,33 @@
   <script src="/js/factory/ajax_response_factory.js"></script>
 
 </head>
+<body>
 
-<body ng-controller="MainController">
-  <h2><code>spring-data-rest-webmvc-helloworld</code></h2>
-  <button ng-click="createExampleData()">Create Data</button><button ng-click="clearCollection()">Clear Collection</button>
+<!-- Primary Page Layout
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<div class="container" ng-controller="SampleController">
+  <div class="row">
+    <div class="one-half column" style="margin-top: 25%">
+      <h2><code>spring-data-rest-webmvc-helloworld</code></h2>
 
-  <code>
-    <h4>Size: {{examples.length}}</h4>
-    <div ng-repeat="example in examples">
+      <input type="text" ng-model="name" placeholder="Enter name"/>
+      <button ng-click="createExampleData(name)">Create Data</button>
 
+      <div ng-if="examples">
+        <input ng-model="searchText" type="text" placeholder="Enter name" />
+        <button ng-click="findByName(searchText)">Find By Name</button>
+
+        <button ng-click="clearCollection()">Clear Collection</button>
+        <button ng-if="displayShowAll" ng-click="showAll()">Show All</button>
+      </div>
+
+      <table-of-data ng-if="examples" data="examples"></table-of-data>
     </div>
-    <ul>
-      <li ng-repeat="example in examples"><code>{{example}}</code></li>
-    </ul>
-  </code>
+  </div>
+</div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>
 </html>
+

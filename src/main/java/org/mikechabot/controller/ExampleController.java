@@ -5,9 +5,10 @@ import org.mikechabot.ajax.AjaxResponseFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by mikechabot on 10/30/15.
@@ -27,9 +28,9 @@ public class ExampleController {
         return ajaxResponseFactory.successWithData(exampleService.getExampleData());
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity createExampleData() {
-        exampleService.createExampleData();
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public ResponseEntity createExampleData(@RequestBody String name) {
+        exampleService.createExampleData(name);
         return ajaxResponseFactory.successWithMessage("Successfully created example data");
     }
 
@@ -37,6 +38,11 @@ public class ExampleController {
     public ResponseEntity clearCollection() {
         exampleService.clearCollection();
         return ajaxResponseFactory.successWithMessage("Purged collection");
+    }
+
+    @RequestMapping(value = "/find/{name}", method = RequestMethod.GET)
+    public ResponseEntity findByName(@PathVariable String name) {
+        return ajaxResponseFactory.successWithData(exampleService.getByName(name));
     }
 
 }

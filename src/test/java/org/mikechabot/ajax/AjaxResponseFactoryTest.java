@@ -46,7 +46,7 @@ public class AjaxResponseFactoryTest {
 
         assertEquals(entity.getStatusCode(), OK);
         assertEquals(response.getStatus(), SUCCESS);
-        assertEquals(response.getStatusMessage(), null);
+        assertEquals(response.getMessage(), null);
         assertEquals(response.getData(), null);
     }
 
@@ -57,7 +57,7 @@ public class AjaxResponseFactoryTest {
 
         assertEquals(entity.getStatusCode(), OK);
         assertEquals(response.getStatus(), SUCCESS);
-        assertEquals(response.getStatusMessage(), "This is a test message");
+        assertEquals(response.getMessage(), "This is a test message");
         assertEquals(response.getData(), null);
     }
 
@@ -72,7 +72,7 @@ public class AjaxResponseFactoryTest {
         JsonResponse responseWithMessage = (JsonResponse) entity.getBody();
         assertEquals(responseWithMessage.getStatus(), SUCCESS);
         assertEquals(responseWithMessage.getData(), data);
-        assertEquals(responseWithMessage.getStatusMessage(), null);
+        assertEquals(responseWithMessage.getMessage(), null);
 
         Example example = (Example) ((JsonResponse) entity.getBody()).getData();
 
@@ -92,7 +92,7 @@ public class AjaxResponseFactoryTest {
         JsonResponse responseWithMessage = (JsonResponse) entity.getBody();
         assertEquals(responseWithMessage.getStatus(), SUCCESS);
         assertEquals(responseWithMessage.getData(), data);
-        assertEquals(responseWithMessage.getStatusMessage(), "This is a message");
+        assertEquals(responseWithMessage.getMessage(), "This is a message");
 
         Example example = (Example) ((JsonResponse) entity.getBody()).getData();
 
@@ -118,7 +118,7 @@ public class AjaxResponseFactoryTest {
         JsonResponse responseWithMessage = (JsonResponse) entity.getBody();
         assertEquals(responseWithMessage.getStatus(), SUCCESS);
         assertEquals(responseWithMessage.getData(), data);
-        assertEquals(responseWithMessage.getStatusMessage(), "This is a message");
+        assertEquals(responseWithMessage.getMessage(), "This is a message");
 
         Example example = (Example) ((JsonResponse) entity.getBody()).getData();
 
@@ -167,7 +167,7 @@ public class AjaxResponseFactoryTest {
 
         assertEquals(entity.getStatusCode(), OK);
         assertEquals(response.getStatus(), FAIL);
-        assertEquals(response.getStatusMessage(), null);
+        assertEquals(response.getMessage(), null);
         assertEquals(response.getData(), null);
     }
 
@@ -178,7 +178,7 @@ public class AjaxResponseFactoryTest {
 
         assertEquals(entity.getStatusCode(), OK);
         assertEquals(response.getStatus(), FAIL);
-        assertEquals(response.getStatusMessage(), "This is a test message");
+        assertEquals(response.getMessage(), "This is a test message");
         assertEquals(response.getData(), null);
     }
 
@@ -193,7 +193,7 @@ public class AjaxResponseFactoryTest {
         JsonResponse responseWithMessage = (JsonResponse) entity.getBody();
         assertEquals(responseWithMessage.getStatus(), FAIL);
         assertEquals(responseWithMessage.getData(), data);
-        assertEquals(responseWithMessage.getStatusMessage(), null);
+        assertEquals(responseWithMessage.getMessage(), null);
 
         Example example = (Example) ((JsonResponse) entity.getBody()).getData();
 
@@ -213,7 +213,7 @@ public class AjaxResponseFactoryTest {
         JsonResponse responseWithMessage = (JsonResponse) entity.getBody();
         assertEquals(responseWithMessage.getStatus(), FAIL);
         assertEquals(responseWithMessage.getData(), data);
-        assertEquals(responseWithMessage.getStatusMessage(), "This is a message");
+        assertEquals(responseWithMessage.getMessage(), "This is a message");
 
         Example example = (Example) ((JsonResponse) entity.getBody()).getData();
 
@@ -245,7 +245,7 @@ public class AjaxResponseFactoryTest {
 
         assertEquals(entity.getStatusCode(), INTERNAL_SERVER_ERROR);
         assertEquals(response.getStatus(), ERROR);
-        assertEquals(response.getStatusMessage(), null);
+        assertEquals(response.getMessage(), null);
         assertEquals(response.getData(), null);
     }
 
@@ -256,7 +256,7 @@ public class AjaxResponseFactoryTest {
 
         assertEquals(entity.getStatusCode(), INTERNAL_SERVER_ERROR);
         assertEquals(response.getStatus(), ERROR);
-        assertEquals(response.getStatusMessage(), "This is a test message");
+        assertEquals(response.getMessage(), "This is a test message");
         assertEquals(response.getData(), null);
     }
 
@@ -271,7 +271,7 @@ public class AjaxResponseFactoryTest {
         JsonResponse responseWithMessage = (JsonResponse) entity.getBody();
         assertEquals(responseWithMessage.getStatus(), ERROR);
         assertEquals(responseWithMessage.getData(), data);
-        assertEquals(responseWithMessage.getStatusMessage(), null);
+        assertEquals(responseWithMessage.getMessage(), null);
 
         Example example = (Example) ((JsonResponse) entity.getBody()).getData();
 
@@ -291,7 +291,7 @@ public class AjaxResponseFactoryTest {
         JsonResponse responseWithMessage = (JsonResponse) entity.getBody();
         assertEquals(responseWithMessage.getStatus(), ERROR);
         assertEquals(responseWithMessage.getData(), data);
-        assertEquals(responseWithMessage.getStatusMessage(), "This is a message");
+        assertEquals(responseWithMessage.getMessage(), "This is a message");
 
         Example example = (Example) ((JsonResponse) entity.getBody()).getData();
 

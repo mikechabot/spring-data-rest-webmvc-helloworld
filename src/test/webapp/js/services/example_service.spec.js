@@ -39,8 +39,9 @@ describe('example_service.js', function() {
         });
 
         it('should call the correct rest url', function () {
-            service.createExampleData();
-            expect(dataAccessService.post).toHaveBeenCalledWith(baseUrl);
+            var name = 'foobar';
+            service.createExampleData(name);
+            expect(dataAccessService.post).toHaveBeenCalledWith(baseUrl + '/create', name);
         });
 
         afterEach(function() {
