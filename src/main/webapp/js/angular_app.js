@@ -54,11 +54,13 @@ app.controller('SampleController', ['$scope', '$timeout', 'ExampleService',
         }
 
         $scope.createExampleData = function(name) {
-            $scope.name = undefined;
             ExampleService.createExampleData(name)
                 .done(function() {
                     _updateExampleList();
                 })
+                .always(function() {
+                    $scope.name = undefined;
+                });
         };
 
         $scope.showAll = function() {
@@ -73,13 +75,17 @@ app.controller('SampleController', ['$scope', '$timeout', 'ExampleService',
                 });
         };
 
-        $scope.findByName = function(name) {
-            $scope.searchText = undefined;
-            ExampleService.findByName(name)
+        $scope.findByName = function(searchName) {
+            ExampleService.findByName(searchName)
                 .done(function(examples) {
                     $timeout(function() {
                         $scope.examples = examples;
                         $scope.displayShowAll = true;
+                    });
+                })
+                .always(function() {
+                    $timeout(function() {
+                        $scope.searchName = undefined;
                     });
                 });
         }

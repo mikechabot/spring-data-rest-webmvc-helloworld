@@ -61,10 +61,10 @@
       <input type="text" ng-model="name" placeholder="Enter name"/>
       <button ng-click="createExampleData(name)">Create Data</button>
 
-      <div ng-if="examples">
-        <input ng-model="searchText" type="text" placeholder="Enter name" />
-        <button ng-click="findByName(searchText)">Find By Name</button>
-
+      <div ng-show="examples">
+        <input type="text" ng-model="searchName" placeholder="Enter name" />
+        <button ng-disabled="!searchName || searchName.length === 0" ng-click="findByName(searchName)">Find By Name</button>
+        <br>
         <button ng-click="clearCollection()">Clear Collection</button>
         <button ng-if="displayShowAll" ng-click="showAll()">Show All</button>
       </div>
