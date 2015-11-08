@@ -99,6 +99,7 @@
           </preloadSources>
           <sourceIncludes>
             <include>common/common.js</include>
+            <include>common/data_services.js</include>
             <include>service/example_service.js</include>
             <include>factory/ajax_response_factory.js</include>
           </sourceIncludes>
