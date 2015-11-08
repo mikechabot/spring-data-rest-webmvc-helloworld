@@ -4,7 +4,7 @@ describe('data_services.js', function() {
 
         var service = undefined;
 
-        describe('should return the correct data when resolving the promise', function () {
+        describe('should return the correct data when resolving the promise for a', function () {
 
             var testData = 123;
 
@@ -42,7 +42,7 @@ describe('data_services.js', function() {
 
         });
 
-        describe('should return the correct data after rejecting the promise', function () {
+        describe('should return the correct data after rejecting the promise for a', function () {
 
             beforeEach(function () {
                 module('test', function ($provide) {
@@ -59,15 +59,6 @@ describe('data_services.js', function() {
                 service = DataAccessService;
             }));
 
-
-            var ajaxRequestFactory = function() {
-                return promiseUtil.getRejectedPromise({
-                    getData: function() {
-                        return testData;
-                    }
-                });
-            };
-
             it('GET request', function() {
                 var promise = service.get('url');
                 promise
@@ -83,6 +74,64 @@ describe('data_services.js', function() {
                         expect(data).toEqual(testData);
                     })
             });
+
+        });
+
+        describe('should throw errors for', function () {
+
+            var error = new Error('URL cannot be null, undefined, or empty');
+
+            beforeEach(function () {
+                module('test', function ($provide) {
+                    $provide.value('AjaxRequestFactory', function() {
+                        return promiseUtil.getRejectedPromise(error);
+                    });
+                });
+            });
+            beforeEach(inject(function (DataAccessService) {
+                service = DataAccessService;
+            }));
+
+            it('GET requests without a url', function() {
+                var promise = service.get();
+                promise
+                    .fail(function(data) {
+                        expect(data).toEqual(error);
+                    })
+
+                var promise = service.get(null);
+                promise
+                    .fail(function(data) {
+                        expect(data).toEqual(error);
+                    })
+
+                var promise = service.get(undefined);
+                promise
+                    .fail(function(data) {
+                        expect(data).toEqual(error);
+                    })
+            });
+
+            it('POST requests without a url', function() {
+                var promise = service.post();
+                promise
+                    .fail(function(data) {
+                        expect(data).toEqual(error);
+                    })
+
+                var promise = service.post(null);
+                promise
+                    .fail(function(data) {
+                        expect(data).toEqual(error);
+                    })
+
+                var promise = service.post(undefined);
+                promise
+                    .fail(function(data) {
+                        expect(data).toEqual(error);
+                    })
+            });
+
 
         });
 

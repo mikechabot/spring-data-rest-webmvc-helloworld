@@ -34,13 +34,18 @@ app.service('DataAccessService', ['AjaxRequestFactory', function (AjaxRequestFac
      */
     var _request = function (type, url, data) {
         var deferred = $.Deferred();
-        AjaxRequestFactory(type, url, data)
-            .done(function (response) {
-                deferred.resolve(response.getData());
-            })
-            .fail(function (response) {
-                deferred.reject(response.getData());
-            });
+        if (!angular.hasValue(url) || _.isEmpty(url)) {
+            deferred.reject(new Error('URL cannot be null, undefined, or empty'));
+        } else {
+            AjaxRequestFactory(type, url, data)
+                .done(function (response) {
+                    deferred.resolve(response.getData());
+                })
+                .fail(function (response) {
+                    deferred.reject(response.getData());
+                });
+        }
+
         return deferred.promise();
     };
 
