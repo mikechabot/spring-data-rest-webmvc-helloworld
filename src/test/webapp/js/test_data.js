@@ -1,4 +1,28 @@
 var testData = {
+    ajax: {
+        testUrl: '/test',
+        options: {
+            get: {
+                type: 'GET',
+                dataType: 'json',
+                url: '/test'
+            },
+            post: {
+                type: 'POST',
+                dataType: 'json',
+                url: '/test'
+            }
+        },
+        optionsWithData: {
+            post: {
+                type: 'POST',
+                dataType: 'json',
+                url: '/test',
+                data: 123,
+                contentType: 'application/json'
+            }
+        }
+    },
     jsonResponseData: {
         getSuccessResponse: function() {
             return {

@@ -44,6 +44,10 @@ app.factory('AjaxRequestFactory', ['DATA_CONST', 'AjaxResponseFactory', 'AjaxSer
             this.options = {};                      // Holds the AJAX request options
             this.response = {};                     // Holds the AJAX response object (body, status, status messages)
 
+            if (!type || !url) {
+                deferred.reject(new Error('Type and/or URL cannot be null, undefined, or empty'))
+            }
+
             this._initOptions(type, url, data);
 
             _request(this)

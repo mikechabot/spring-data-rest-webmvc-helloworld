@@ -6,14 +6,14 @@ describe('data_services.js', function() {
 
         describe('should return the correct data when resolving the promise for a', function () {
 
-            var testData = 123;
+            var _data = 123;
 
             beforeEach(function () {
                 module('test', function ($provide) {
                     $provide.value('AjaxRequestFactory', function() {
                         return promiseUtil.getResolvedPromise({
                             getData: function() {
-                                return testData;
+                                return _data
                             }
                         });
                     });
@@ -28,7 +28,7 @@ describe('data_services.js', function() {
                 var promise = service.get('url');
                 promise
                     .done(function(data) {
-                        expect(data).toEqual(testData);
+                        expect(data).toEqual(_data);
                     })
             });
 
@@ -36,7 +36,7 @@ describe('data_services.js', function() {
                 var promise = service.post('url');
                 promise
                     .done(function(data) {
-                        expect(data).toEqual(testData);
+                        expect(data).toEqual(_data);
                     })
             });
 
@@ -44,12 +44,14 @@ describe('data_services.js', function() {
 
         describe('should return the correct data after rejecting the promise for a', function () {
 
+            var _data = 123;
+
             beforeEach(function () {
                 module('test', function ($provide) {
                     $provide.value('AjaxRequestFactory', function() {
                         return promiseUtil.getRejectedPromise({
                             getData: function() {
-                                return testData;
+                                return _data;
                             }
                         });
                     });
@@ -63,7 +65,7 @@ describe('data_services.js', function() {
                 var promise = service.get('url');
                 promise
                     .fail(function(data) {
-                        expect(data).toEqual(testData);
+                        expect(data).toEqual(_data);
                     })
             });
 
@@ -71,7 +73,7 @@ describe('data_services.js', function() {
                 var promise = service.post('url');
                 promise
                     .fail(function(data) {
-                        expect(data).toEqual(testData);
+                        expect(data).toEqual(_data);
                     })
             });
 

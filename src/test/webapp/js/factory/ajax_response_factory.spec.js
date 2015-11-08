@@ -96,7 +96,7 @@ describe('ajax_response_factory.js', function() {
         describe('and null for remaining parameters', function() {
             it('and it should create an empty response object', function () {
                 ajaxResponse = factory(undefined, null, null, null);
-                expect(ajaxResponse.getData()).toBeUndefined()
+                expect(ajaxResponse.getData()).toBeUndefined();
                 expect(ajaxResponse.getMessage()).toBeUndefined();
                 expect(ajaxResponse.getStatus()).toBeUndefined();
                 expect(ajaxResponse.getStatusCode()).toBeUndefined();
