@@ -20,7 +20,7 @@ Full stack annotation based Spring MVC web project that utilizes Spring Data Mon
 ### MongoDB
 Out-of-the-box configuration assumes MongoDB is running at the default socket address:
 - **Host**: `localhost`
-- **Post**: `27017`
+- **Port**: `27017`
 
 These properties along with the database name, base mapping package, and transaction write concern are configurable, and can be found in `/resource/bootstrap.properties`.
 
