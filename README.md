@@ -1,6 +1,9 @@
 # spring-data-rest-webmvc-helloworld
 Full stack annotation based Spring MVC web project that utilizes Spring Data MongoDB. Fronted with AngularJS.
 
+### Live Demo
+Viewable at http://ec2-52-91-168-48.compute-1.amazonaws.com
+
 ### Prerequisites
 * Maven
 * MongoDB
